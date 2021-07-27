@@ -1,40 +1,45 @@
-'From Cuis 5.0 [latest update: #4689] on 27 July 2021 at 10:42:18 pm'!
+'From Cuis 5.0 [latest update: #4689] on 27 July 2021 at 10:57:22 pm'!
 'Description '!
-!provides: 'AdventOfCode' 1 4!
+!provides: 'AdventOfCode' 1 6!
 !requires: 'PetitParser' 1 2 nil!
 SystemOrganization addCategory: 'AdventOfCode'!
 
 
-!classDefinition: #Day2020_01 category: 'AdventOfCode'!
-Object subclass: #Day2020_01
+!classDefinition: #AOC2020_01 category: 'AdventOfCode'!
+Object subclass: #AOC2020_01
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'AdventOfCode'!
-!classDefinition: 'Day2020_01 class' category: 'AdventOfCode'!
-Day2020_01 class
+!classDefinition: 'AOC2020_01 class' category: 'AdventOfCode'!
+AOC2020_01 class
 	instanceVariableNames: ''!
 
-!classDefinition: #Day2020_02 category: 'AdventOfCode'!
-Object subclass: #Day2020_02
+!classDefinition: #AOC2020_02 category: 'AdventOfCode'!
+Object subclass: #AOC2020_02
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'AdventOfCode'!
-!classDefinition: 'Day2020_02 class' category: 'AdventOfCode'!
-Day2020_02 class
+!classDefinition: 'AOC2020_02 class' category: 'AdventOfCode'!
+AOC2020_02 class
 	instanceVariableNames: ''!
 
 
-!Day2020_01 class methodsFor: 'as yet unclassified' stamp: 'MJ 7/27/2021 20:00:50'!
-input: aDay
-	"return the input from day aDay"
-	| result |
-	
-	
-	result := Dictionary new.
-	result at: 1 put: '1470
-1577
+!AOC2020_01 class methodsFor: 'private' stamp: 'MJ 7/27/2021 22:52:25'!
+number: aNumber toSum: aSum
+	| input nums |
+	input := self input.
+	nums _  input lines :: collect: [ :line | line asNumber].
+	 nums combinations: aNumber atATimeDo: [:each | 
+		each sum == aSum :: ifTrue: [
+			^ each product
+		]
+	]! !
+
+!AOC2020_01 class methodsFor: 'aoc' stamp: 'MJ 7/27/2021 22:52:09'!
+input
+^ '1577
 1054
 1962
 1107
@@ -233,44 +238,17 @@ input: aDay
 1911
 1282
 1306'.
+! !
 
-^ result at: aDay! !
-
-!Day2020_01 class methodsFor: 'as yet unclassified' stamp: 'MJ 7/27/2021 22:25:34'!
-number: aNumber toSum: aSum
-	| input nums |
-	input := self input: 1.
-	nums _  input lines :: collect: [ :line | line asNumber].
-	 nums combinations: aNumber atATimeDo: [:each | 
-		each sum == aSum :: ifTrue: [
-			^ each product
-		]
-	]! !
-
-!Day2020_01 class methodsFor: 'as yet unclassified' stamp: 'MJ 7/27/2021 22:26:08'!
+!AOC2020_01 class methodsFor: 'aoc' stamp: 'MJ 7/27/2021 22:26:08'!
 part1
 	^self number: 2 toSum: 2020.! !
 
-!Day2020_01 class methodsFor: 'as yet unclassified' stamp: 'MJ 7/27/2021 22:25:44'!
+!AOC2020_01 class methodsFor: 'aoc' stamp: 'MJ 7/27/2021 22:25:44'!
 part2
 	^self number: 3 toSum: 2020.! !
 
-!Day2020_02 class methodsFor: 'as yet unclassified' stamp: 'MJ 7/27/2021 22:41:48'!
-checkLine1: aLine with: aParser
-| char from num parsed pw to |
-
-
-parsed := aParser parse: aLine.
-from:= parsed at: 1 :: asNumber.
-to:= parsed at: 3 :: asNumber.
-char _ parsed at: 5.
-pw _ parsed last.
-
-num:= pw count: [ :c  | c == char].
-
-^ from to: to :: includes: num.! !
-
-!Day2020_02 class methodsFor: 'as yet unclassified' stamp: 'MJ 7/27/2021 22:09:45'!
+!AOC2020_02 class methodsFor: 'aoc' stamp: 'MJ 7/27/2021 22:09:45'!
 input
 
 ^ '3-7 r: mxvlzcjrsqst
@@ -1274,8 +1252,28 @@ input
 4-7 p: npzgpppdpjj
 6-7 w: wwwwwwqww'! !
 
-!Day2020_02 class methodsFor: 'as yet unclassified' stamp: 'MJ 7/27/2021 22:41:49'!
+!AOC2020_02 class methodsFor: 'aoc' stamp: 'MJ 7/27/2021 22:50:57'!
 part1
 	| rule |
-	rule _ 	  #digit asParser plus flatten, $- asParser, #digit asParser plus flatten, #space asParser, #word asParser, $: asParser, #space asParser, #word asParser plus flatten.
+	rule _ 	  self parser.
 	^self input lines select: [ :aLine | self checkLine1: aLine with: rule] :: size! !
+
+!AOC2020_02 class methodsFor: 'private' stamp: 'MJ 7/27/2021 22:41:48'!
+checkLine1: aLine with: aParser
+| char from num parsed pw to |
+
+
+parsed := aParser parse: aLine.
+from:= parsed at: 1 :: asNumber.
+to:= parsed at: 3 :: asNumber.
+char _ parsed at: 5.
+pw _ parsed last.
+
+num:= pw count: [ :c  | c == char].
+
+^ from to: to :: includes: num.! !
+
+!AOC2020_02 class methodsFor: 'private' stamp: 'MJ 7/27/2021 22:50:19'!
+parser
+
+	^ #digit asParser plus flatten, $- asParser, #digit asParser plus flatten, #space asParser, #word asParser, $: asParser, #space asParser, #word asParser plus flatten! !
