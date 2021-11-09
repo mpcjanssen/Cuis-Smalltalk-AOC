@@ -1,6 +1,6 @@
-'From Cuis 5.0 [latest update: #4749] on 9 November 2021 at 8:04:34 pm'!
+'From Cuis 5.0 [latest update: #4963] on 9 November 2021 at 8:24:48 pm'!
 'Description '!
-!provides: 'AdventOfCode' 1 7!
+!provides: 'AdventOfCode' 1 8!
 !requires: 'PetitParser' 1 2 nil!
 SystemOrganization addCategory: 'AdventOfCode'!
 
@@ -1279,9 +1279,9 @@ num:= pw count: [ :c  | c == char].
 
 ^ from to: to :: includes: num.! !
 
-!AOC2020_02 class methodsFor: 'private' stamp: 'MJ 11/9/2021 20:04:00'!
+!AOC2020_02 class methodsFor: 'private' stamp: 'MJ 11/9/2021 20:24:32'!
 checkLine2: aLine with: aParser
-| char pos1 pos2 parsed pw count |
+| char pos1 pos2 parsed pw |
 
 
 parsed := aParser parse: aLine.
@@ -1289,14 +1289,8 @@ pos1 _ (parsed at: 1 :: asNumber) .
 pos2 _ (parsed at: 3 :: asNumber) .
 char _ parsed at: 5.
 pw _ parsed last.
-count _ 0.
-((pw at: pos1) == char ) ifTrue: [
-	count _ count + 1
-].
-((pw at: pos2) == char ) ifTrue: [
-	count _ count + 1
-].
-^ (count == 1)! !
+
+^ ((pw at: pos1) == char ) xor: ((pw at: pos2) == char ) ! !
 
 !AOC2020_02 class methodsFor: 'private' stamp: 'MJ 11/9/2021 19:56:59'!
 parser
