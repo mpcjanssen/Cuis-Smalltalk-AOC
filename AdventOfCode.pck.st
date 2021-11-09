@@ -1,6 +1,6 @@
-'From Cuis 5.0 [latest update: #4689] on 27 July 2021 at 10:57:22 pm'!
+'From Cuis 5.0 [latest update: #4749] on 9 November 2021 at 8:04:34 pm'!
 'Description '!
-!provides: 'AdventOfCode' 1 6!
+!provides: 'AdventOfCode' 1 7!
 !requires: 'PetitParser' 1 2 nil!
 SystemOrganization addCategory: 'AdventOfCode'!
 
@@ -1252,11 +1252,17 @@ input
 4-7 p: npzgpppdpjj
 6-7 w: wwwwwwqww'! !
 
-!AOC2020_02 class methodsFor: 'aoc' stamp: 'MJ 7/27/2021 22:50:57'!
+!AOC2020_02 class methodsFor: 'aoc' stamp: 'MJ 11/9/2021 19:56:59'!
 part1
 	| rule |
 	rule _ 	  self parser.
 	^self input lines select: [ :aLine | self checkLine1: aLine with: rule] :: size! !
+
+!AOC2020_02 class methodsFor: 'aoc' stamp: 'MJ 11/9/2021 20:02:04'!
+part2
+	| rule |
+	rule _ 	  self parser.
+	^self input lines select: [ :aLine | self checkLine2: aLine with: rule] :: size! !
 
 !AOC2020_02 class methodsFor: 'private' stamp: 'MJ 7/27/2021 22:41:48'!
 checkLine1: aLine with: aParser
@@ -1273,7 +1279,26 @@ num:= pw count: [ :c  | c == char].
 
 ^ from to: to :: includes: num.! !
 
-!AOC2020_02 class methodsFor: 'private' stamp: 'MJ 7/27/2021 22:50:19'!
+!AOC2020_02 class methodsFor: 'private' stamp: 'MJ 11/9/2021 20:04:00'!
+checkLine2: aLine with: aParser
+| char pos1 pos2 parsed pw count |
+
+
+parsed := aParser parse: aLine.
+pos1 _ (parsed at: 1 :: asNumber) .
+pos2 _ (parsed at: 3 :: asNumber) .
+char _ parsed at: 5.
+pw _ parsed last.
+count _ 0.
+((pw at: pos1) == char ) ifTrue: [
+	count _ count + 1
+].
+((pw at: pos2) == char ) ifTrue: [
+	count _ count + 1
+].
+^ (count == 1)! !
+
+!AOC2020_02 class methodsFor: 'private' stamp: 'MJ 11/9/2021 19:56:59'!
 parser
 
 	^ #digit asParser plus flatten, $- asParser, #digit asParser plus flatten, #space asParser, #word asParser, $: asParser, #space asParser, #word asParser plus flatten! !
